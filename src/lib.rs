@@ -17,13 +17,28 @@ pub fn multiply(a: u32, b: u32) -> u32 {
 }
 
 #[wasm_bindgen]
-pub fn create_cover(base64_img: String, base64_font: String, params: JsValue) -> String {
+pub fn create_cover(
+    base64_img: String,
+    author_font_base64: String,
+    title_font_base64: String,
+    params: JsValue,
+) -> String {
     utils::set_panic_hook();
     let img_bytes = base64_to_bytes(base64_img);
-    let font_bytes = base64_to_bytes(base64_font);
+    let author_font_bytes = base64_to_bytes(author_font_base64);
+    let title_font_bytes = base64_to_bytes(title_font_base64);
+
     let book_cover_params: BookCoverParams =
         serde_wasm_bindgen::from_value(params).expect("Failed to parse params");
-    let bytes = put_text(img_bytes, font_bytes, book_cover_params).expect("Failed to create cover");
+
+    let bytes = put_text(
+        img_bytes,
+        author_font_bytes,
+        title_font_bytes,
+        book_cover_params,
+    )
+    .expect("Failed to create cover");
+
     bytes_to_base64(bytes)
 }
 
