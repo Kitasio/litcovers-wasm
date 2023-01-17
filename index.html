@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+</head>
+
+<body>
+  <img id="img" src="img.jpg" alt="">
+
+  <script type="module">
+    import init, {multiply, create_cover} from './pkg/litcovers_wasm.js';
+
+    function getBase64Image(img) {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+
+      var dataURL = canvas.toDataURL("image/png");
+
+      return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    }
+
+    // convert img to base64
+    const img = document.getElementById('img');
+    const base64 = getBase64Image(img);
+    console.log(base64)
+
+    const params = {
+      author_font: "Stig.ttf",
+      author: "Prison Mike",
+      author_position: "TopCenter",
+      title_font: "Stig.ttf",
+      title: "Harry Potter and other people",
+      title_position: "BottomCenter",
+      blend_mode: "Overlay",
+      alfa: 3.0,
+      image_url: "https://replicate.delivery/pbxt/pX5B4V8QzvKFBBk7CHm788FQZKeQXvO8RbhfGNLXpIbYcZUQA/out-0.png",
+      line_length: 16,
+    }
+
+    async function run() {
+      await init();
+
+      console.log(`multiply result is: ${multiply(2, 3)}`)
+      console.log(`img bytes: ${create_cover(base64, params)}`)
+    }
+
+    run();
+  </script>
+</body>
+
+</html>
